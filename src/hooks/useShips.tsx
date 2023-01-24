@@ -10,6 +10,7 @@ export const useShips = () => {
     highlightColor,
     isActive,
   }: ShipConstructor) => {
+    let coordinates: [number, number][] = [];
     return {
       name,
       id,
@@ -17,7 +18,7 @@ export const useShips = () => {
       color,
       highlightColor,
       isActive,
-      isPlaced: false,
+      coordinates,
     };
   };
 
@@ -26,40 +27,40 @@ export const useShips = () => {
       name: "Carrier",
       id: "C",
       length: 5,
-      color: "bg-red-600",
-      highlightColor: "bg-red-500",
+      color: "bg-red-500",
+      highlightColor: "bg-red-400",
       isActive: true,
     }),
     createShip({
       name: "Battleship",
       id: "B",
       length: 4,
-      color: "bg-orange-600",
-      highlightColor: "bg-orange-500",
+      color: "bg-orange-500",
+      highlightColor: "bg-orange-400",
       isActive: false,
     }),
     createShip({
       name: "Destroyer",
       id: "D",
       length: 3,
-      color: "bg-slate-600",
-      highlightColor: "bg-slate-500",
+      color: "bg-yellow-500",
+      highlightColor: "bg-yellow-300",
       isActive: false,
     }),
     createShip({
       name: "Submarine",
       id: "S",
       length: 3,
-      color: "bg-blue-600",
-      highlightColor: "bg-blue-500",
+      color: "bg-blue-500",
+      highlightColor: "bg-blue-400",
       isActive: false,
     }),
     createShip({
       name: "Patrol Boat",
       id: "P",
       length: 2,
-      color: "bg-purple-600",
-      highlightColor: "bg-purple-500",
+      color: "bg-purple-500",
+      highlightColor: "bg-purple-400",
       isActive: false,
     }),
   ]);
@@ -71,7 +72,7 @@ export const useShips = () => {
   };
 
   const getNotPlacedShip = (ships: Ship[]): Ship | undefined => {
-    return ships.find((ship) => !ship.isPlaced);
+    return ships.find((ship) => !ship.coordinates.length);
   };
 
   const getShipByID = (id: Ship["id"]) => {
@@ -89,12 +90,11 @@ export const useShips = () => {
 
   const setIsPlaced = (
     name: Ship["name"],
-    isPlaced: boolean,
-    updateActive?: boolean
+    coordinates: Ship["coordinates"]
   ) => {
     const newShips = [...ships].map((ship) => {
       if (ship.name === name) {
-        ship.isPlaced = isPlaced;
+        ship.coordinates = coordinates;
       }
       return ship;
     });
@@ -108,6 +108,7 @@ export const useShips = () => {
     getShipByID,
     getNotPlacedShip,
     setIsPlaced,
+    setActiveShip,
   };
 };
 
