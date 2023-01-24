@@ -1,3 +1,5 @@
+import { ShipConstructor } from "./vite-env";
+
 export const getHighlightedTiles = (
   coordinates: [number, number],
   length: number,
@@ -31,7 +33,9 @@ export const getHighlightedTiles = (
   }
 };
 
-export const generate2DArray = (n: number): number[][] => {
+export const generate2DArray = (
+  n: number
+): number[][] | ShipConstructor["id"][][] => {
   let array: number[][] = [];
   for (let x = 0; x < n; x++) {
     array[x] = [];
