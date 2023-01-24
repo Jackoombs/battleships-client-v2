@@ -20,7 +20,7 @@ export function PlanningBoard() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === " ") {
+      if (event.key === "r" || event.key === "R") {
         setHighlightOrientationIsX((state) => !state);
       }
     };
@@ -33,7 +33,7 @@ export function PlanningBoard() {
   useEffect(() => {
     if (lastHoveredTile) {
       updateHighlightedTiles(lastHoveredTile);
-    }
+    } else console.log("yua");
   }, [highlightOrientationIsX]);
 
   const updateHighlightedTiles = (tile: [number, number]) => {
@@ -49,6 +49,19 @@ export function PlanningBoard() {
     setHighlightOrientationIsX((state) => !state);
   };
 
+  const placeShip = () => {
+    const newBoard = [...board];
+    const activeShip = ships.getActiveShip();
+    if (!activeShip) {
+      return;
+    }
+    for (const coord of highlightedTiles) {
+      const [x, y] = coord;
+      newBoard[x][y] = activeShip?.id;
+    }
+    ships.setIsPlaced(activeShip.name, true);
+  };
+
   return (
     <>
       <div
@@ -61,12 +74,15 @@ export function PlanningBoard() {
           [...Array(10)].map((e2, x) => (
             <PlanningTile
               key={`${x} ${y}`}
+              tileStatus={board[x][y]}
               {...{
                 x,
                 y,
                 updateHighlightedTiles,
+                setLastHoveredTile,
                 highlightColor,
                 highlightedTiles,
+                placeShip,
               }}
             />
           ))
