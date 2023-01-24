@@ -85,3 +85,5 @@ export const useShips = () => {
     updateActiveShip,
   };
 };
+
+export type ShipsType = ReturnType<typeof useShips>;

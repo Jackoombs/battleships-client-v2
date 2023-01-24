@@ -8,9 +8,3 @@ export interface Ship {
   highlightColor: string;
   isActive: boolean;
 }
-
-export interface ShipsType {
-  ships: Ship[];
-  getActiveShip: () => Ship | undefined;
-  updateActiveShip: (name: Ship["name"]) => void;
-}

@@ -1,8 +1,7 @@
 import { createContext } from "react";
 import { Header } from "./components/Header/Header";
 import { PlanningBoard } from "./components/GameBoard/PlanningBoard";
-import { useShips } from "./hooks/useShips";
-import { ShipsType } from "./vite-env";
+import { useShips, ShipsType } from "./hooks/useShips";
 
 export const ShipsContext = createContext<ShipsType | null>(null);
 
