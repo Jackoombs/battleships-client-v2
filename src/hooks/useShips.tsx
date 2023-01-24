@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Ship } from "../vite-env";
+import type { ShipConstructor } from "../vite-env";
 
 export const useShips = () => {
   const createShip = ({
@@ -9,7 +9,7 @@ export const useShips = () => {
     color,
     highlightColor,
     isActive,
-  }: Ship) => {
+  }: ShipConstructor) => {
     return {
       name,
       id,
@@ -26,51 +26,59 @@ export const useShips = () => {
       name: "Carrier",
       id: "C",
       length: 5,
-      color: "bg-red-400",
-      highlightColor: "bg-red-600",
+      color: "bg-red-600",
+      highlightColor: "bg-red-500",
       isActive: true,
     }),
     createShip({
       name: "Battleship",
       id: "B",
       length: 4,
-      color: "bg-orange-400",
-      highlightColor: "bg-orange-600",
+      color: "bg-orange-600",
+      highlightColor: "bg-orange-500",
       isActive: false,
     }),
     createShip({
       name: "Destroyer",
       id: "D",
       length: 3,
-      color: "bg-green-400",
-      highlightColor: "bg-green-600",
+      color: "bg-slate-600",
+      highlightColor: "bg-slate-500",
       isActive: false,
     }),
     createShip({
       name: "Submarine",
       id: "S",
       length: 3,
-      color: "bg-blue-400",
-      highlightColor: "bg-blue-600",
+      color: "bg-blue-600",
+      highlightColor: "bg-blue-500",
       isActive: false,
     }),
     createShip({
       name: "Patrol Boat",
       id: "P",
       length: 2,
-      color: "bg-purple-400",
-      highlightColor: "bg-purple-600",
+      color: "bg-purple-600",
+      highlightColor: "bg-purple-500",
       isActive: false,
     }),
   ]);
 
-  type ship = typeof ships[0];
+  type Ship = typeof ships[0];
 
   const getActiveShip = () => {
     return ships.find((ship) => ship.isActive);
   };
 
-  const updateActiveShip = (name: ship["name"]) => {
+  const getNotPlacedShip = (ships: Ship[]): Ship | undefined => {
+    return ships.find((ship) => !ship.isPlaced);
+  };
+
+  const getShipByID = (id: Ship["id"]) => {
+    return ships.find((ship) => ship.id === id);
+  };
+
+  const setActiveShip = (name: Ship["name"] | undefined) => {
     setShips((ships) => {
       return ships.map((ship) => {
         ship.isActive = name === ship.name ? true : false;
@@ -79,10 +87,27 @@ export const useShips = () => {
     });
   };
 
+  const setIsPlaced = (
+    name: Ship["name"],
+    isPlaced: boolean,
+    updateActive?: boolean
+  ) => {
+    const newShips = [...ships].map((ship) => {
+      if (ship.name === name) {
+        ship.isPlaced = isPlaced;
+      }
+      return ship;
+    });
+    setShips(ships);
+    setActiveShip(getNotPlacedShip(newShips)?.name);
+  };
+
   return {
     ships,
     getActiveShip,
-    updateActiveShip,
+    getShipByID,
+    getNotPlacedShip,
+    setIsPlaced,
   };
 };
 
