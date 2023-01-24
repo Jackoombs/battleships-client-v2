@@ -1,11 +1,11 @@
 import { clsx } from "clsx";
-import { useEffect } from "react";
 import { getHighlightedTiles } from "../../utils";
 
 interface Props {
   x: number;
   y: number;
-  highlightColor: string | null;
+  updateHighlightedTiles: (tile: [number, number]) => void;
+  highlightColor: string | undefined;
   highlightOrientationIsX: boolean;
   highlightedTiles: [number, number][];
   setHighlightedTiles: React.Dispatch<React.SetStateAction<[number, number][]>>;
@@ -17,6 +17,7 @@ interface Props {
 export function PlanningTile({
   x,
   y,
+  updateHighlightedTiles,
   highlightColor,
   highlightOrientationIsX,
   highlightedTiles,
@@ -34,7 +35,7 @@ export function PlanningTile({
   };
 
   const tileColor = (x: number, y: number) => {
-    return x % 2 === y % 2 ? "bg-cyan-200" : "bg-cyan-400";
+    return x % 2 === y % 2 ? "bg-teal-200" : "bg-teal-400";
   };
 
   return (
@@ -42,16 +43,13 @@ export function PlanningTile({
       data-x={x}
       data-y={y}
       className={clsx(
-        "aspect-square w-full md:w-14 lg:w-16 border-cyan-800 border md:border-2 duration-100 rounded md:rounded-lg",
+        "aspect-square w-full md:w-14 lg:w-16 border-cyan-900 border sm:border-2 duration-100 rounded sm:rounded-lg",
         isHighlighted(highlightedTiles, [x, y])
           ? highlightColor
           : tileColor(x, y)
       )}
       onPointerEnter={() => {
-        setHighlightedTiles(
-          getHighlightedTiles([x, y], 5, highlightOrientationIsX)
-        );
-        setLastHoveredTile([x, y]);
+        updateHighlightedTiles([x, y]);
       }}
     >
       {`${x}, ${y}`}
