@@ -66,10 +66,7 @@ export function PlanningBoard() {
                 y,
                 updateHighlightedTiles,
                 highlightColor,
-                highlightOrientationIsX,
                 highlightedTiles,
-                setHighlightedTiles,
-                setLastHoveredTile,
               }}
             />
           ))

@@ -6,12 +6,7 @@ interface Props {
   y: number;
   updateHighlightedTiles: (tile: [number, number]) => void;
   highlightColor: string | undefined;
-  highlightOrientationIsX: boolean;
   highlightedTiles: [number, number][];
-  setHighlightedTiles: React.Dispatch<React.SetStateAction<[number, number][]>>;
-  setLastHoveredTile: React.Dispatch<
-    React.SetStateAction<[number, number] | null>
-  >;
 }
 
 export function PlanningTile({
@@ -19,10 +14,7 @@ export function PlanningTile({
   y,
   updateHighlightedTiles,
   highlightColor,
-  highlightOrientationIsX,
   highlightedTiles,
-  setHighlightedTiles,
-  setLastHoveredTile,
 }: Props) {
   const isHighlighted = (
     arr: [number, number][],
