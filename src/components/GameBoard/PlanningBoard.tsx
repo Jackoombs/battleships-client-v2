@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useShipsContext } from "../../hooks/useShipsProvider";
 import { generate2DArray, getHighlightedTiles } from "../../utils";
+import { ShipConstructor } from "../../vite-env";
 import { BoardCoordinates } from "./BoardCoordinates";
 import { PlanningTile } from "./PlanningTile";
 
 export function PlanningBoard() {
   const ships = useShipsContext();
+  const activeShip = ships.getActiveShip();
   const [board, setBoard] = useState(generate2DArray(10));
   const [highlightColor, setHighlightColor] = useState<string | undefined>(
-    ships.getActiveShip()?.color
+    activeShip?.color
   );
   const [highlightOrientationIsX, setHighlightOrientationIsX] = useState(false);
   const [highlightedTiles, setHighlightedTiles] = useState<[number, number][]>(
@@ -33,33 +35,58 @@ export function PlanningBoard() {
   useEffect(() => {
     if (lastHoveredTile) {
       updateHighlightedTiles(lastHoveredTile);
-    } else console.log("yua");
-  }, [highlightOrientationIsX]);
+    }
+  }, [highlightOrientationIsX, ships]);
 
   const updateHighlightedTiles = (tile: [number, number]) => {
-    const activeShip = ships.getActiveShip();
-    if (activeShip) {
-      setHighlightedTiles(
-        getHighlightedTiles(tile, activeShip.length, highlightOrientationIsX)
-      );
+    if (!activeShip) {
+      return setHighlightedTiles([]);
     }
+    const highlightedTiles = getHighlightedTiles(
+      tile,
+      activeShip.length,
+      highlightOrientationIsX
+    );
+    setHighlightedTiles(highlightedTiles);
   };
 
-  const handleWheel = () => {
-    setHighlightOrientationIsX((state) => !state);
+  const checkCoordinatesValid = (coordinates: [number, number][]) => {
+    for (const coord of coordinates) {
+      const [x, y] = coord;
+      if (typeof board[x][y] === "string") {
+        return false;
+      }
+    }
+    return true;
   };
+  const areHighlightedTilesValid = checkCoordinatesValid(highlightedTiles);
 
   const placeShip = () => {
     const newBoard = [...board];
-    const activeShip = ships.getActiveShip();
-    if (!activeShip) {
+    if (!activeShip || !areHighlightedTilesValid) {
       return;
     }
     for (const coord of highlightedTiles) {
       const [x, y] = coord;
       newBoard[x][y] = activeShip?.id;
     }
-    ships.setIsPlaced(activeShip.name, true);
+    setBoard(newBoard);
+    ships.setIsPlaced(activeShip.name, highlightedTiles);
+  };
+
+  const removeShip = (id: ShipConstructor["id"]) => {
+    const newBoard = [...board];
+    const ship = ships.getShipByID(id);
+    const shipCoordinates = ship!.coordinates;
+    for (const coord of shipCoordinates) {
+      const [x, y] = coord;
+      newBoard[x][y] = 0;
+    }
+    setBoard(newBoard);
+  };
+
+  const handleWheel = () => {
+    setHighlightOrientationIsX((state) => !state);
   };
 
   return (
@@ -67,7 +94,7 @@ export function PlanningBoard() {
       <div
         className="relative mx-auto grid grid-cols-10 md:w-max"
         onPointerLeave={() => setHighlightColor(undefined)}
-        onPointerEnter={() => setHighlightColor(ships.getActiveShip()?.color)}
+        onPointerEnter={() => setHighlightColor(activeShip?.color)}
         onWheel={handleWheel}
       >
         {[...Array(10)].map((e, y) =>
@@ -79,10 +106,12 @@ export function PlanningBoard() {
                 x,
                 y,
                 updateHighlightedTiles,
+                areHighlightedTilesValid,
                 setLastHoveredTile,
                 highlightColor,
                 highlightedTiles,
                 placeShip,
+                removeShip,
               }}
             />
           ))
