@@ -77,7 +77,7 @@ export function PlanningTile({
   return (
     <div
       className={clsx(
-        "aspect-square w-full lg:w-14 xl:w-[4.5rem] [1440]:w-20 border-slate-900 lg:border-slate-700 border-2 duration-100 rounded sm:rounded-lg",
+        "aspect-square w-full lg:w-14 xl:w-[4.5rem] border-slate-900 lg:border-slate-700 border-2 duration-100 rounded sm:rounded-lg",
         tileColor(x, y),
         isCursorPointer()
       )}
@@ -87,7 +87,7 @@ export function PlanningTile({
         updateHighlightedTiles([x, y]);
       }}
     >
-      {`${x}, ${y}`}
+      {/* {`${x}, ${y}`} */}
     </div>
   );
 }
