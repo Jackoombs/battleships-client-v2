@@ -1,8 +1,5 @@
 import { createContext, useEffect } from "react";
-import { PlanningBoard } from "./components/GameBoard/PlanningBoard";
 import { useShips, ShipsType } from "./hooks/useShips";
-import { HiArrowSmRight } from "react-icons/hi";
-import { StartGameButton } from "./components/GameControl/StartGameButton";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { GameType, useGame } from "./hooks/useGame";
 import { BoardController } from "./components/GameBoard/BoardController";
