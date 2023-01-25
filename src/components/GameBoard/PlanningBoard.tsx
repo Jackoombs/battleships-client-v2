@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useShipsContext } from "../../hooks/useShipsProvider";
 import { generate2DArray, getHighlightedTiles } from "../../utils";
 import { ShipConstructor } from "../../vite-env";
+import { RotateShipButton } from "../GameControl/RotateShipButton";
+import { StartGameButton } from "../GameControl/StartGameButton";
 import { BoardCoordinates } from "./BoardCoordinates";
 import { PlanningTile } from "./PlanningTile";
 
@@ -9,9 +11,6 @@ export function PlanningBoard() {
   const ships = useShipsContext();
   const activeShip = ships.getActiveShip();
   const [board, setBoard] = useState(generate2DArray(10));
-  const [highlightColor, setHighlightColor] = useState<string | undefined>(
-    activeShip?.color
-  );
   const [highlightOrientationIsX, setHighlightOrientationIsX] = useState(false);
   const [highlightedTiles, setHighlightedTiles] = useState<[number, number][]>(
     []
@@ -83,18 +82,20 @@ export function PlanningBoard() {
       newBoard[x][y] = 0;
     }
     setBoard(newBoard);
+    ships.setIsPlaced(ship!.name, []);
   };
 
   const handleWheel = () => {
     setHighlightOrientationIsX((state) => !state);
   };
 
+  console.log(ships.getActiveShip());
+
   return (
     <>
       <div
-        className="relative mx-auto grid grid-cols-10 md:w-max"
-        onPointerLeave={() => setHighlightColor(undefined)}
-        onPointerEnter={() => setHighlightColor(activeShip?.color)}
+        className="relative mx-auto grid grid-cols-10 w-full lg:w-max"
+        onPointerLeave={() => setHighlightedTiles([])}
         onWheel={handleWheel}
       >
         {[...Array(10)].map((e, y) =>
@@ -108,7 +109,6 @@ export function PlanningBoard() {
                 updateHighlightedTiles,
                 areHighlightedTilesValid,
                 setLastHoveredTile,
-                highlightColor,
                 highlightedTiles,
                 placeShip,
                 removeShip,
@@ -117,6 +117,10 @@ export function PlanningBoard() {
           ))
         )}
         <BoardCoordinates />
+      </div>
+      <div className="lg:hidden flex gap-3 pt-4 md:pt-14">
+        <RotateShipButton setState={setHighlightOrientationIsX} />
+        <StartGameButton />
       </div>
     </>
   );

@@ -8,7 +8,7 @@ module.exports = {
         sans: ["Space Grotesk", ...defaultTheme.fontFamily.sans],
       },
       maxWidth: {
-        container: "min(94%, 90rem)",
+        container: "min(94%, 110rem)",
       },
     },
   },

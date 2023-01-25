@@ -11,7 +11,6 @@ interface Props {
   >;
   updateHighlightedTiles: (tile: [number, number]) => void;
   areHighlightedTilesValid: boolean;
-  highlightColor: string | undefined;
   highlightedTiles: [number, number][];
   placeShip: () => void;
   removeShip: (id: ShipConstructor["id"]) => void;
@@ -24,7 +23,6 @@ export function PlanningTile({
   setLastHoveredTile,
   areHighlightedTilesValid,
   updateHighlightedTiles,
-  highlightColor,
   highlightedTiles,
   placeShip,
   removeShip,
@@ -35,9 +33,6 @@ export function PlanningTile({
     arr: [number, number][],
     target: [number, number]
   ): boolean => {
-    if (!highlightColor) {
-      return false;
-    }
     return arr.some((subArr) => subArr.every((val, i) => val === target[i]));
   };
 
@@ -55,7 +50,7 @@ export function PlanningTile({
     if (isHighlighted(highlightedTiles, [x, y]) && activeShip) {
       return activeShip.highlightColor;
     }
-    return x % 2 === y % 2 ? "bg-cyan-200" : "bg-teal-300";
+    return x % 2 === y % 2 ? "bg-cyan-200" : "bg-cyan-100";
   };
 
   const isCursorPointer = () => {
@@ -82,7 +77,7 @@ export function PlanningTile({
   return (
     <div
       className={clsx(
-        "aspect-square w-full md:w-14 lg:w-16 border-cyan-800 border sm:border-2 duration-100 rounded sm:rounded-lg",
+        "aspect-square w-full lg:w-14 xl:w-[4.5rem] [1440]:w-20 border-slate-900 lg:border-slate-700 border-2 duration-100 rounded sm:rounded-lg",
         tileColor(x, y),
         isCursorPointer()
       )}
