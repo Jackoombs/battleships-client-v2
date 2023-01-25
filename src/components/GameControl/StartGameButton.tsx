@@ -1,22 +1,47 @@
 import clsx from "clsx";
+import { useState } from "react";
 import { useShipsContext } from "../../hooks/useShipsProvider";
+import { Button } from "../ui/Button";
+import { Loading } from "../ui/Loading";
+import { Modal } from "../ui/Modal";
+import { Text } from "../ui/Text";
 
 export const StartGameButton = () => {
   const ships = useShipsContext();
   const areAllShipsPlaced = ships.areAllShipsPlaced();
-
-  console.log(ships.areAllShipsPlaced());
+  const [playerIsReady, setPlayerIsReady] = useState(false);
+  const handleClick = () => {
+    if (areAllShipsPlaced) {
+      setPlayerIsReady(true);
+    }
+  };
 
   return (
-    <button
-      className={clsx(
-        "w-full mx-auto px-8 py-4 text-slate-900 rounded font-semibold text-lg uppercase tracking-widest",
-        areAllShipsPlaced
-          ? "hover:text-cyan-100 hover:bg-slate-900 duration-150 bg-cyan-100"
-          : "bg-gray-500 cursor-default"
+    <>
+      <button
+        onClick={handleClick}
+        className={clsx(
+          "w-full mx-auto px-8 py-4 text-slate-900 rounded font-semibold text-lg uppercase tracking-widest col-span-full",
+          areAllShipsPlaced
+            ? "hover:text-cyan-100 hover:bg-slate-900 duration-150 bg-cyan-100"
+            : "bg-gray-500 cursor-default"
+        )}
+      >
+        Ready?
+      </button>
+      {playerIsReady && (
+        <Modal setModalOpen={setPlayerIsReady}>
+          <div className="flex flex-col gap-8 w-full items-center">
+            <Text bold center theme="dark" size="lg">
+              Waiting for opponent.
+            </Text>
+            <Loading size="text-6xl" />
+            <Button theme="dark" callback={() => setPlayerIsReady(false)}>
+              Wait I'm not ready yet!
+            </Button>
+          </div>
+        </Modal>
       )}
-    >
-      Ready?
-    </button>
+    </>
   );
 };

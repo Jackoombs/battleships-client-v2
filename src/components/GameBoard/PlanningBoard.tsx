@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useShipsContext } from "../../hooks/useShipsProvider";
 import { generate2DArray, getHighlightedTiles } from "../../utils";
 import { ShipConstructor } from "../../vite-env";
-import { RotateShipButton } from "../GameControl/RotateShipButton";
-import { StartGameButton } from "../GameControl/StartGameButton";
+import { MobileControls } from "../GameControl/MobileControls";
 import { BoardCoordinates } from "./BoardCoordinates";
 import { PlanningTile } from "./PlanningTile";
 
@@ -118,10 +117,7 @@ export function PlanningBoard() {
         )}
         <BoardCoordinates />
       </div>
-      <div className="lg:hidden flex gap-3 pt-4 md:pt-14">
-        <RotateShipButton setState={setHighlightOrientationIsX} />
-        <StartGameButton />
-      </div>
+      <MobileControls {...{ setHighlightOrientationIsX }} />
     </>
   );
 }
