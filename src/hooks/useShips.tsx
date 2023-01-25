@@ -102,6 +102,15 @@ export const useShips = () => {
     setActiveShip(getNotPlacedShip(newShips)?.name);
   };
 
+  const areAllShipsPlaced = () => {
+    for (const ship of ships) {
+      if (!ship.coordinates.length) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   return {
     ships,
     getActiveShip,
@@ -109,6 +118,7 @@ export const useShips = () => {
     getNotPlacedShip,
     setIsPlaced,
     setActiveShip,
+    areAllShipsPlaced,
   };
 };
 
