@@ -1,4 +1,4 @@
-import { useGameContext } from "../../hooks/useGameProvider";
+import { useGameContext } from "../../hooks/useGameContext";
 import { PlanningBoard } from "./PlanningBoard";
 
 export const BoardController = () => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useShipsContext } from "../../hooks/useShipsProvider";
+import { useShipsContext } from "../../hooks/useShipsContext";
 import { generate2DArray, getHighlightedTiles } from "../../utils";
 import { ShipConstructor } from "../../vite-env";
 import { MobileControls } from "../GameControl/MobileControls";
@@ -87,8 +87,6 @@ export function PlanningBoard() {
   const handleWheel = () => {
     setHighlightOrientationIsX((state) => !state);
   };
-
-  console.log(ships.getActiveShip());
 
   return (
     <>

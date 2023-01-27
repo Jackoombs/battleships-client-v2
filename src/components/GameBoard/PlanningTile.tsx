@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { useShipsContext } from "../../hooks/useShipsProvider";
+import { useShipsContext } from "../../hooks/useShipsContext";
 import { ShipConstructor } from "../../vite-env";
 
 interface Props {
