@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { useShipsContext } from "../../hooks/useShipsProvider";
+import { useShipsContext } from "../../hooks/useShipsContext";
 import { Button } from "../ui/Button";
 import { Loading } from "../ui/Loading";
 import { Modal } from "../ui/Modal";
@@ -30,7 +30,7 @@ export const StartGameButton = () => {
         Ready?
       </button>
       {playerIsReady && (
-        <Modal setModalOpen={setPlayerIsReady}>
+        <Modal callBack={() => setPlayerIsReady(false)}>
           <div className="flex flex-col gap-8 w-full items-center">
             <Text bold center theme="dark" size="lg">
               Waiting for opponent.
