@@ -16,7 +16,7 @@ export const ShowInfoButton = () => {
         <IoInformationOutline className="text-3xl" />
       </button>
       {modalOpen && (
-        <Modal {...{ setModalOpen }}>
+        <Modal callBack={() => setModalOpen(false)}>
           <div>
             <Instructions />
             <button
