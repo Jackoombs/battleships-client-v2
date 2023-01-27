@@ -1,8 +1,9 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CreateOrJoin } from "./CreateOrJoin";
 import { Button } from "../ui/Button";
+import { useSocketContext } from "../../hooks/useSocketContext";
+import { useEffect } from "react";
 
 interface Props {
   createOrJoin: "create" | "join";
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export const Form = ({ createOrJoin, setCreateOrJoin }: Props) => {
+  const { socket, requestRoom } = useSocketContext();
+
   const schema = z.object({
     room: z
       .string()
@@ -24,12 +27,25 @@ export const Form = ({ createOrJoin, setCreateOrJoin }: Props) => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<Schema>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Schema> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Schema> = ({ room }) => {
+    requestRoom(room, createOrJoin);
+  };
+
+  useEffect(() => {
+    socket.on("roomRequestError", (message) => {
+      setError("room", { type: "custom", message });
+    });
+
+    return () => {
+      socket.off("roomRequestError");
+    };
+  }, []);
 
   return (
     <form
