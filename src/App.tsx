@@ -11,9 +11,9 @@ export const GameContext = createContext<GameType | null>(null);
 export const SocketContext = createContext<SocketType | null>(null);
 
 function App() {
-  const game: GameType = useGame();
-  const gamePhase = game.gamePhase;
   const ships = useShips();
+  const game: GameType = useGame({ ships });
+  const gamePhase = game.gamePhase;
   const socket = useSocket({ game });
 
   return (
