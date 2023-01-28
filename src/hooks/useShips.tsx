@@ -79,27 +79,24 @@ export const useShips = () => {
     return ships.find((ship) => ship.id === id);
   };
 
-  const setActiveShip = (name: Ship["name"] | undefined) => {
+  const setActiveShip = (id: Ship["id"] | undefined) => {
     setShips((ships) => {
       return ships.map((ship) => {
-        ship.isActive = name === ship.name ? true : false;
+        ship.isActive = id === ship.id ? true : false;
         return ship;
       });
     });
   };
 
-  const setIsPlaced = (
-    name: Ship["name"],
-    coordinates: Ship["coordinates"]
-  ) => {
-    const newShips = [...ships].map((ship) => {
-      if (ship.name === name) {
+  const setCoordinates = (id: Ship["id"], coordinates: Ship["coordinates"]) => {
+    const newShips = ships.map((ship) => {
+      if (ship.id === id) {
         ship.coordinates = coordinates;
       }
       return ship;
     });
     setShips(ships);
-    setActiveShip(getNotPlacedShip(newShips)?.name);
+    setActiveShip(getNotPlacedShip(newShips)?.id);
   };
 
   const areAllShipsPlaced = () => {
@@ -116,7 +113,7 @@ export const useShips = () => {
     getActiveShip,
     getShipByID,
     getNotPlacedShip,
-    setIsPlaced,
+    setCoordinates,
     setActiveShip,
     areAllShipsPlaced,
   };

@@ -12,8 +12,7 @@ interface Props {
   updateHighlightedTiles: (tile: [number, number]) => void;
   areHighlightedTilesValid: boolean;
   highlightedTiles: [number, number][];
-  placeShip: () => void;
-  removeShip: (id: ShipConstructor["id"]) => void;
+  handleClick: (tileStatus: ShipConstructor["id"] | number) => void;
 }
 
 export function PlanningTile({
@@ -24,8 +23,7 @@ export function PlanningTile({
   areHighlightedTilesValid,
   updateHighlightedTiles,
   highlightedTiles,
-  placeShip,
-  removeShip,
+  handleClick,
 }: Props) {
   const ships = useShipsContext();
   const activeShip = ships.getActiveShip();
@@ -64,16 +62,6 @@ export function PlanningTile({
     }
   };
 
-  const handleClick = () => {
-    if (!activeShip && typeof tileStatus === "string") {
-      const ship = ships.getShipByID(tileStatus);
-      removeShip(tileStatus);
-      ships.setActiveShip(ship?.name);
-    } else {
-      placeShip();
-    }
-  };
-
   return (
     <div
       className={clsx(
@@ -81,7 +69,7 @@ export function PlanningTile({
         tileColor(x, y),
         isCursorPointer()
       )}
-      onClick={handleClick}
+      onClick={() => handleClick(tileStatus)}
       onPointerEnter={() => {
         setLastHoveredTile([x, y]);
         updateHighlightedTiles([x, y]);
