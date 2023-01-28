@@ -9,12 +9,19 @@ interface Props {
 
 export const useSocket = ({ game }: Props) => {
   const [room, setRoom] = useState<string | null>(null);
+  const [playerShipsReady, setPlayerShipsReady] = useState(false);
 
   useEffect(() => {
-    socket.on("updateGamePhase", (phase: typeof game.gamePhase) => {
-      game.setGamePhase(phase);
-      console.log(`Game phase now: ${phase}`);
-    });
+    socket.on(
+      "updateGamePhase",
+      (phase: typeof game.gamePhase, playerTurn?: boolean | null) => {
+        game.setGamePhase(phase);
+        if (playerTurn !== undefined) {
+          game.setPlayerTurn(playerTurn);
+        }
+        console.log(`Game phase now: ${phase}`);
+      }
+    );
 
     socket.on("connectToRoom", (room: string) => {
       setRoom(room);
@@ -25,23 +32,44 @@ export const useSocket = ({ game }: Props) => {
       console.log(`Disconnected from room: ${room}`);
     });
 
+    socket.on("checkPlayerReady", () => {
+      console.log(playerShipsReady);
+      if (playerShipsReady) {
+        socket.emit("beginGame", room);
+      }
+    });
+
     return () => {
       socket.off("updateGamePhase");
       socket.off("connectToRoom");
       socket.off("disconnectFromRoom");
+      socket.off("checkPlayerReady");
     };
-  }, []);
+  }, [playerShipsReady]);
 
   const requestRoom = (room: string, createOrJoin: "create" | "join") => {
     socket.emit("requestRoom", room, createOrJoin);
   };
 
-  const disconnectFromRoom = (room: string) => {
+  const disconnectFromRoom = () => {
     socket.emit("disconnectFromRoom", room);
     setRoom(null);
   };
 
-  return { socket, room, setRoom, requestRoom, disconnectFromRoom };
+  const checkOpponentReady = () => {
+    socket.emit("checkOpponentReady", room);
+  };
+
+  return {
+    socket,
+    room,
+    setRoom,
+    requestRoom,
+    disconnectFromRoom,
+    playerShipsReady,
+    setPlayerShipsReady,
+    checkOpponentReady,
+  };
 };
 
 export type SocketType = ReturnType<typeof useSocket>;
