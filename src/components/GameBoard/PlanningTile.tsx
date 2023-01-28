@@ -5,14 +5,14 @@ import { ShipConstructor } from "../../vite-env";
 interface Props {
   x: number;
   y: number;
-  tileStatus: ShipConstructor["id"] | number;
+  tileStatus: 0 | "H" | "M" | ShipConstructor["id"];
   setLastHoveredTile: React.Dispatch<
     React.SetStateAction<[number, number] | null>
   >;
   updateHighlightedTiles: (tile: [number, number]) => void;
   areHighlightedTilesValid: boolean;
   highlightedTiles: [number, number][];
-  handleClick: (tileStatus: ShipConstructor["id"] | number) => void;
+  handleClick: (tileStatus: 0 | "H" | "M" | ShipConstructor["id"]) => void;
 }
 
 export function PlanningTile({
@@ -35,6 +35,7 @@ export function PlanningTile({
   };
 
   const tileColor = (x: number, y: number) => {
+    if (tileStatus === "H" || tileStatus === "M") return;
     if (
       !areHighlightedTilesValid &&
       isHighlighted(highlightedTiles, [x, y]) &&

@@ -9,7 +9,7 @@ import { PlanningTile } from "./PlanningTile";
 export function PlanningBoard() {
   const ships = useShipsContext();
   const activeShip = ships.getActiveShip();
-  const { userBoard, placementIsValid, placeShip, removeShip } =
+  const { playerBoard, placementIsValid, placeShip, removeShip } =
     useGameContext();
   const [highlightOrientationIsX, setHighlightOrientationIsX] = useState(false);
   const [highlightedTiles, setHighlightedTiles] = useState<[number, number][]>(
@@ -52,9 +52,13 @@ export function PlanningBoard() {
 
   const handleWheel = () => {
     setHighlightOrientationIsX((state) => !state);
+    11;
   };
 
-  const handleClick = (tileStatus: number | "C" | "B" | "D" | "S" | "P") => {
+  const handleClick = (
+    tileStatus: 0 | "C" | "B" | "D" | "S" | "P" | "H" | "M"
+  ) => {
+    if (tileStatus === "H" || tileStatus === "M") return;
     if (!activeShip && typeof tileStatus === "string") {
       removeShip(tileStatus);
     } else if (activeShip && areHighlightedTilesValid) {
@@ -73,7 +77,7 @@ export function PlanningBoard() {
           [...Array(10)].map((e2, x) => (
             <PlanningTile
               key={`${x} ${y}`}
-              tileStatus={userBoard[x][y]}
+              tileStatus={playerBoard[x][y]}
               {...{
                 x,
                 y,
