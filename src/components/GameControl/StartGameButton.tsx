@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { useGameContext } from "../../hooks/useGameContext";
 import { useShipsContext } from "../../hooks/useShipsContext";
+import { useSocketContext } from "../../hooks/useSocketContext";
 import { Button } from "../ui/Button";
 import { Loading } from "../ui/Loading";
 import { Modal } from "../ui/Modal";
@@ -8,11 +10,13 @@ import { Text } from "../ui/Text";
 
 export const StartGameButton = () => {
   const ships = useShipsContext();
+  const { playerShipsReady, setPlayerShipsReady, checkOpponentReady } =
+    useSocketContext();
   const areAllShipsPlaced = ships.areAllShipsPlaced();
-  const [playerIsReady, setPlayerIsReady] = useState(false);
   const handleClick = () => {
     if (areAllShipsPlaced) {
-      setPlayerIsReady(true);
+      setPlayerShipsReady(true);
+      checkOpponentReady();
     }
   };
 
@@ -29,14 +33,14 @@ export const StartGameButton = () => {
       >
         Ready?
       </button>
-      {playerIsReady && (
-        <Modal callBack={() => setPlayerIsReady(false)}>
+      {playerShipsReady && (
+        <Modal callBack={() => setPlayerShipsReady(false)}>
           <div className="flex flex-col gap-8 w-full items-center">
             <Text bold center theme="dark" size="lg">
               Waiting for opponent.
             </Text>
             <Loading size="text-6xl" />
-            <Button theme="dark" callback={() => setPlayerIsReady(false)}>
+            <Button theme="dark" callback={() => setPlayerShipsReady(false)}>
               Wait I'm not ready yet!
             </Button>
           </div>

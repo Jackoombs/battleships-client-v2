@@ -20,14 +20,14 @@ export const Lobby = () => {
       {!createOrJoin && <CreateOrJoin {...{ setCreateOrJoin }} />}
       {createOrJoin && <Form {...{ createOrJoin, setCreateOrJoin }} />}
       {room && gamePhase === "lobby" && (
-        <Modal callBack={() => disconnectFromRoom(room)}>
+        <Modal callBack={() => disconnectFromRoom()}>
           <div className="flex flex-col gap-8 w-full items-center">
             <Text bold center theme="dark" size="lg">
               Waiting for opponent to join game.
             </Text>
             <p className="font-bold text-3xl">{room}</p>
             <Loading size="text-6xl" />
-            <Button theme="dark" callback={() => disconnectFromRoom(room)}>
+            <Button theme="dark" callback={() => disconnectFromRoom()}>
               Back to lobby
             </Button>
           </div>
