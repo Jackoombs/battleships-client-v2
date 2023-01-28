@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { generate2DArray } from "../utils";
-import { ShipConstructor } from "../vite-env";
+import type {
+  ShipId,
+  PlanningTileType,
+  PlayerTileType,
+  OpponentTileType,
+} from "../vite-env";
 import { ShipsType } from "./useShips";
 
 interface Props {
@@ -14,15 +19,18 @@ export const useGame = ({ ships }: Props) => {
   const [gamePhase, setGamePhase] = useState<
     "lobby" | "planning" | "battle" | "result"
   >("lobby");
-  const [playerBoard, setPlayerBoard] = useState<
-    (0 | "H" | "M" | ShipConstructor["id"])[][]
-  >(generate2DArray(10));
-  const [opponentBoard, setOpponentBoard] = useState<(0 | "H" | "M" | "L")[][]>(
+  const [planningBoard, setPlanningBoard] = useState<PlanningTileType[][]>(
+    generate2DArray(10)
+  );
+  const [playerBoard, setPlayerBoard] = useState<PlayerTileType[][]>(
+    generate2DArray(10)
+  );
+  const [opponentBoard, setOpponentBoard] = useState<OpponentTileType[][]>(
     generate2DArray(10)
   );
 
-  const placeShip = (id: Ship["id"], coordinates: Ship["coordinates"]) => {
-    const newBoard = [...playerBoard];
+  const placeShip = (id: ShipId, coordinates: Ship["coordinates"]) => {
+    const newBoard = [...planningBoard];
     for (const coord of coordinates) {
       const [x, y] = coord;
       newBoard[x][y] = id;
@@ -31,8 +39,8 @@ export const useGame = ({ ships }: Props) => {
     ships.setCoordinates(id, coordinates);
   };
 
-  const removeShip = (id: Ship["id"]) => {
-    const newBoard = [...playerBoard];
+  const removeShip = (id: ShipId) => {
+    const newBoard = [...planningBoard];
     const ship = ships.getShipByID(id);
     if (!ship) {
       return;
@@ -56,6 +64,10 @@ export const useGame = ({ ships }: Props) => {
     return true;
   };
 
+  const setPlayerBoardOnGameStart = () => {
+    setPlayerBoard(planningBoard);
+  };
+
   const setTileLoading = (coord: [number, number]) => {
     const newBoard = [...opponentBoard];
     const [x, y] = coord;
@@ -63,9 +75,27 @@ export const useGame = ({ ships }: Props) => {
     setOpponentBoard(newBoard);
   };
 
+  const fireResult = (coord: [number, number], hitOrMiss: "H" | "M") => {
+    const newBoard = [...opponentBoard];
+    const [x, y] = coord;
+    newBoard[x][y] = hitOrMiss;
+    setOpponentBoard(newBoard);
+  };
+
+  const checkIsHit = (coord: [number, number]) => {
+    const [x, y] = coord;
+    const tile = playerBoard[x][y];
+    const isHit = typeof tile === "string" && tile !== "H" && tile !== "M";
+    if (isHit) {
+      const ship = ships.getShipByID(tile);
+    }
+  };
+
   return {
+    planningBoard,
     playerBoard,
     opponentBoard,
+    setPlayerBoardOnGameStart,
     gamePhase,
     setGamePhase,
     placementIsValid,
