@@ -33,10 +33,8 @@ export const getHighlightedTiles = (
   }
 };
 
-export const generate2DArray = (
-  n: number
-): (number | ShipConstructor["id"])[][] => {
-  let array: number[][] = [];
+export const generate2DArray = (n: number): 0[][] => {
+  let array: 0[][] = [];
   for (let x = 0; x < n; x++) {
     array[x] = [];
     for (let y = 0; y < n; y++) {
