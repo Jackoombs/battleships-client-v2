@@ -1,18 +1,18 @@
 import { clsx } from "clsx";
 import { useShipsContext } from "../../hooks/useShipsContext";
-import { ShipConstructor } from "../../vite-env";
+import { PlanningTileType } from "../../vite-env";
 
 interface Props {
   x: number;
   y: number;
-  tileStatus: 0 | "H" | "M" | ShipConstructor["id"];
+  tileStatus: PlanningTileType;
   setLastHoveredTile: React.Dispatch<
     React.SetStateAction<[number, number] | null>
   >;
   updateHighlightedTiles: (tile: [number, number]) => void;
   areHighlightedTilesValid: boolean;
   highlightedTiles: [number, number][];
-  handleClick: (tileStatus: 0 | "H" | "M" | ShipConstructor["id"]) => void;
+  handleClick: (tileStatus: PlanningTileType) => void;
 }
 
 export function PlanningTile({
@@ -35,7 +35,6 @@ export function PlanningTile({
   };
 
   const tileColor = (x: number, y: number) => {
-    if (tileStatus === "H" || tileStatus === "M") return;
     if (
       !areHighlightedTilesValid &&
       isHighlighted(highlightedTiles, [x, y]) &&

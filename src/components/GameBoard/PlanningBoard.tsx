@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useGameContext } from "../../hooks/useGameContext";
 import { useShipsContext } from "../../hooks/useShipsContext";
 import { getHighlightedTiles } from "../../utils";
+import type { PlanningTileType } from "../../vite-env";
 import { MobileControls } from "../GameControl/MobileControls";
 import { BoardCoordinates } from "./BoardCoordinates";
 import { PlanningTile } from "./PlanningTile";
@@ -9,7 +10,7 @@ import { PlanningTile } from "./PlanningTile";
 export function PlanningBoard() {
   const ships = useShipsContext();
   const activeShip = ships.getActiveShip();
-  const { playerBoard, placementIsValid, placeShip, removeShip } =
+  const { planningBoard, placementIsValid, placeShip, removeShip } =
     useGameContext();
   const [highlightOrientationIsX, setHighlightOrientationIsX] = useState(false);
   const [highlightedTiles, setHighlightedTiles] = useState<[number, number][]>(
@@ -55,10 +56,7 @@ export function PlanningBoard() {
     11;
   };
 
-  const handleClick = (
-    tileStatus: 0 | "C" | "B" | "D" | "S" | "P" | "H" | "M"
-  ) => {
-    if (tileStatus === "H" || tileStatus === "M") return;
+  const handleClick = (tileStatus: PlanningTileType) => {
     if (!activeShip && typeof tileStatus === "string") {
       removeShip(tileStatus);
     } else if (activeShip && areHighlightedTilesValid) {
@@ -77,7 +75,7 @@ export function PlanningBoard() {
           [...Array(10)].map((e2, x) => (
             <PlanningTile
               key={`${x} ${y}`}
-              tileStatus={playerBoard[x][y]}
+              tileStatus={planningBoard[x][y]}
               {...{
                 x,
                 y,

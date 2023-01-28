@@ -1,11 +1,12 @@
 import clsx from "clsx";
 import { useGameContext } from "../../hooks/useGameContext";
+import { OpponentTileType } from "../../vite-env";
 import { Loading } from "../ui/Loading";
 
 interface Props {
   x: number;
   y: number;
-  tileStatus: 0 | "H" | "M" | "L";
+  tileStatus: OpponentTileType;
   hoverDisabled: boolean;
   setHoverDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -45,7 +46,9 @@ export const OpponentTile = ({
         hoverStyle()
       )}
     >
-      {tileStatus === "L" && <Loading size="text-6xl" />}
+      {tileStatus === "L" && (
+        <Loading size="text-2xl sm:text-4xl xl:text-6xl" />
+      )}
     </div>
   );
 };

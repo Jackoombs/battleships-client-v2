@@ -1,22 +1,18 @@
-import type { ShipConstructor } from "../../vite-env";
-import { generate2DArray } from "../../utils";
+import type { PlayerTileType } from "../../vite-env";
 import { useShipsContext } from "../../hooks/useShipsContext";
 import clsx from "clsx";
 
 interface Props {
   x: number;
   y: number;
-  tileStatus: 0 | "H" | "M" | ShipConstructor["id"];
+  tileStatus: PlayerTileType;
 }
 
 export const PlayerTile = ({ x, y, tileStatus }: Props) => {
   const { getShipByID } = useShipsContext();
 
   const tileColor = () => {
-    if (tileStatus === "H") {
-      return "bg-black";
-    }
-    if (tileStatus === "M") {
+    if (tileStatus === "M" || tileStatus === "H") {
       return "bg-transparent";
     }
     if (typeof tileStatus === "string") {
