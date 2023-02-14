@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGameContext } from "../../hooks/useGameContext";
 import { BoardCoordinates } from "./BoardCoordinates";
 import { OpponentTile } from "./OpponentTile";
 
 export const OpponentBoard = () => {
   const { opponentBoard } = useGameContext();
-  const [hoverDisabled, setHoverDisabled] = useState(false);
+  const [hoverDisabled, setHoverDisabled] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHoverDisabled(true);
+    }, 500);
+  }, []);
 
   return (
     <div className="relative mx-auto grid grid-cols-10 w-full lg:w-max">
