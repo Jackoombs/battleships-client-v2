@@ -1,7 +1,11 @@
 import clsx from "clsx";
 import { useGameContext } from "../../hooks/useGameContext";
+import { useSocketContext } from "../../hooks/useSocketContext";
 import { OpponentTileType } from "../../vite-env";
 import { Loading } from "../ui/Loading";
+import { BiTargetLock } from "react-icons/bi";
+import { GiFallingBomb } from "react-icons/gi";
+import { useState, useEffect } from "react";
 
 interface Props {
   x: number;
@@ -18,37 +22,76 @@ export const OpponentTile = ({
   hoverDisabled,
   setHoverDisabled,
 }: Props) => {
-  const { setTileLoading } = useGameContext();
+  const {
+    updateOpponentBoard,
+    latestTileTarget,
+    setLatestTileTarget,
+    setPlayerTurn,
+    setRoundResultMessage,
+  } = useGameContext();
+  const { playerFire } = useSocketContext();
+  const [isHover, setIsHover] = useState(false);
+  const [borderHighlighted, setBorderHighlighted] = useState(false);
 
   const tileColor = () => {
+    if (tileStatus === "M" || tileStatus === "H") {
+      return "bg-transparent";
+    }
     return x % 2 === y % 2 ? "bg-cyan-200" : "bg-cyan-100";
   };
 
   const hoverStyle = () => {
     if (tileStatus === 0 && !hoverDisabled) {
-      return "hover:bg-transparent cursor-pointer";
+      return "cursor-pointer";
     }
   };
 
   const handleClick = () => {
     if (tileStatus === 0 && !hoverDisabled) {
-      setTileLoading([x, y]);
+      updateOpponentBoard([x, y], "L");
       setHoverDisabled(true);
+      playerFire([x, y]);
     }
   };
+
+  useEffect(() => {
+    if (!latestTileTarget) {
+      return;
+    }
+    if (latestTileTarget[0] === x && latestTileTarget[1] === y) {
+      console.log(latestTileTarget);
+      setBorderHighlighted(true);
+      const interval = setInterval(() => {
+        setBorderHighlighted((curr) => !curr);
+      }, 400);
+      setTimeout(() => {
+        clearInterval(interval);
+        setPlayerTurn((curr) => !curr);
+        setRoundResultMessage(null);
+        setLatestTileTarget(null);
+      }, 1000);
+    }
+  }, [latestTileTarget]);
 
   return (
     <div
       onClick={handleClick}
+      onPointerEnter={() => setIsHover(true)}
+      onPointerLeave={() => setIsHover(false)}
       className={clsx(
-        "aspect-square w-full lg:w-14 xl:w-[4.5rem] border-slate-900 lg:border-slate-700 border-2 duration-100 rounded sm:rounded-lg flex items-center justify-center",
+        "aspect-square w-full lg:w-14 xl:w-[4.5rem] text-slate-900  duration-100 rounded sm:rounded-lg flex items-center justify-center text-2xl sm:text-4xl xl:text-6xl",
         tileColor(),
-        hoverStyle()
+        hoverStyle(),
+        borderHighlighted
+          ? "border-red-500 border-[6px]"
+          : "border-slate-900 lg:border-slate-700 border-2"
       )}
     >
       {tileStatus === "L" && (
         <Loading size="text-2xl sm:text-4xl xl:text-6xl" />
       )}
+      {tileStatus === "H" && <BiTargetLock className="text-cyan-200" />}
+      {!tileStatus && !hoverDisabled && isHover && <GiFallingBomb />}
     </div>
   );
 };
