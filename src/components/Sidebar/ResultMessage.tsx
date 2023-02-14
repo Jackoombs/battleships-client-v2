@@ -3,5 +3,7 @@ import { Text } from "../ui/Text";
 
 export const ResultMessage = () => {
   const { roundResultMessage } = useGameContext();
-  return <>{roundResultMessage && <Text>{roundResultMessage}</Text>}</>;
+  return (
+    <>{roundResultMessage && <Text size="lg">{roundResultMessage}</Text>}</>
+  );
 };
