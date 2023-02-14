@@ -6,15 +6,21 @@ import { useGameContext } from "../../hooks/useGameContext";
 interface Props {
   maxWidth?: string;
   height?: string;
+  className?: string;
 }
 
-export const TurnIndicator = ({ maxWidth, height = "h-16" }: Props) => {
+export const TurnIndicator = ({
+  maxWidth,
+  height = "h-16",
+  className,
+}: Props) => {
   const { playerTurn } = useGameContext();
 
   return (
     <div
       className={clsx(
         "relative bg-cyan-100 rounded mx-auto flex overflow-hidden items-center",
+        className,
         maxWidth,
         height
       )}
