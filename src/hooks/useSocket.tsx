@@ -100,6 +100,12 @@ export const useSocket = ({ game, ships }: Props) => {
     socket.emit("playerFire", room, coord);
   };
 
+  const resetGame = () => {
+    game.resetGame();
+    ships.resetShips();
+    setPlayerShipsReady(false);
+  };
+
   return {
     socket,
     room,
@@ -110,6 +116,7 @@ export const useSocket = ({ game, ships }: Props) => {
     setPlayerShipsReady,
     checkOpponentReady,
     playerFire,
+    resetGame,
   };
 };
 

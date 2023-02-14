@@ -151,6 +151,16 @@ export const useGame = ({ ships }: Props) => {
     }
   };
 
+  const resetGame = () => {
+    setPlanningBoard(generate2DArray(10));
+    setPlayerBoard(generate2DArray(10));
+    setOpponentBoard(generate2DArray(10));
+    setPlayerTurn(false);
+    setLatestTileTarget(null);
+    setRoundResultMessage(null);
+    setGamePhase("planning");
+  };
+
   return {
     planningBoard,
     playerBoard,
@@ -175,6 +185,7 @@ export const useGame = ({ ships }: Props) => {
     setLatestTileTarget,
     isWinner,
     setIsWinner,
+    resetGame,
   };
 };
 

@@ -120,6 +120,17 @@ export const useShips = () => {
     setShips(newShips);
   };
 
+  const resetShips = () => {
+    setShips((ships) =>
+      ships.map((ship) => {
+        ship.coordinates = [];
+        ship.hits = [];
+        ship.isActive = ship.id === "C" ? true : false;
+        return ship;
+      })
+    );
+  };
+
   return {
     ships,
     getActiveShip,
@@ -129,6 +140,7 @@ export const useShips = () => {
     setActiveShip,
     areAllShipsPlaced,
     updateShipOnHit,
+    resetShips,
   };
 };
 
