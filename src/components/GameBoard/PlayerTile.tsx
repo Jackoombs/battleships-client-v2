@@ -1,6 +1,10 @@
 import type { PlayerTileType } from "../../vite-env";
 import { useShipsContext } from "../../hooks/useShipsContext";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { useGameContext } from "../../hooks/useGameContext";
+import { BiTargetLock } from "react-icons/bi";
+import { useSocketContext } from "../../hooks/useSocketContext";
 
 interface Props {
   x: number;
@@ -10,6 +14,44 @@ interface Props {
 
 export const PlayerTile = ({ x, y, tileStatus }: Props) => {
   const { getShipByID } = useShipsContext();
+  const {
+    setPlayerTurn,
+    latestTileTarget,
+    setRoundResultMessage,
+    setLatestTileTarget,
+    playerTurn,
+    checkIsWin,
+    setGamePhase,
+  } = useGameContext();
+  const { socket, room } = useSocketContext();
+  const [borderHighlighted, setBorderHighlighted] = useState(false);
+
+  console.log(playerTurn);
+
+  useEffect(() => {
+    if (!latestTileTarget) {
+      return;
+    }
+    if (latestTileTarget[0] === x && latestTileTarget[1] === y) {
+      console.log(latestTileTarget);
+      setBorderHighlighted(true);
+      const interval = setInterval(() => {
+        setBorderHighlighted((curr) => !curr);
+      }, 400);
+      setTimeout(() => {
+        clearInterval(interval);
+        const isWin = checkIsWin();
+        console.log("isWin");
+        if (isWin) {
+          return socket.emit("isWinner", room);
+        }
+        setPlayerTurn((curr) => !curr);
+        setRoundResultMessage(null);
+        setLatestTileTarget(null);
+        setBorderHighlighted(false);
+      }, 1000);
+    }
+  }, [latestTileTarget]);
 
   const tileColor = () => {
     if (tileStatus === "M" || tileStatus === "H") {
@@ -25,9 +67,14 @@ export const PlayerTile = ({ x, y, tileStatus }: Props) => {
   return (
     <div
       className={clsx(
-        "aspect-square w-full lg:w-14 xl:w-[4.5rem] border-slate-900 lg:border-slate-700 border-2 duration-100 rounded sm:rounded-lg",
-        tileColor()
+        "aspect-square w-full lg:w-14 xl:w-[4.5rem] text-slate-900 duration-100 rounded sm:rounded-lg flex items-center justify-center text-2xl sm:text-4xl xl:text-6xl",
+        tileColor(),
+        borderHighlighted
+          ? "border-red-500 border-[6px]"
+          : "border-slate-900 lg:border-slate-700 border-2"
       )}
-    ></div>
+    >
+      {tileStatus === "H" && <BiTargetLock className="text-cyan-200" />}
+    </div>
   );
 };
