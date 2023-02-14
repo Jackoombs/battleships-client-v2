@@ -5,6 +5,7 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { GameType, useGame } from "./hooks/useGame";
 import { BoardController } from "./components/GameBoard/BoardController";
 import { Lobby } from "./components/Lobby/Lobby";
+import { Result } from "./components/Result/Result";
 
 export const ShipsContext = createContext<ShipsType | null>(null);
 export const GameContext = createContext<GameType | null>(null);
@@ -14,7 +15,7 @@ function App() {
   const ships = useShips();
   const game: GameType = useGame({ ships });
   const gamePhase = game.gamePhase;
-  const socket = useSocket({ game });
+  const socket = useSocket({ game, ships });
 
   return (
     <GameContext.Provider value={game}>
@@ -27,7 +28,10 @@ function App() {
             <Sidebar />
             <main className="flex items-center justify-center max-w-[92%] mx-auto w-full">
               {gamePhase === "lobby" && <Lobby />}
-              {gamePhase !== "lobby" && <BoardController />}
+              {(gamePhase === "planning" || gamePhase === "battle") && (
+                <BoardController />
+              )}
+              {gamePhase === "result" && <Result />}
             </main>
           </div>
         </ShipsContext.Provider>
