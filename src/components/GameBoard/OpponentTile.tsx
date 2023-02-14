@@ -59,8 +59,6 @@ export const OpponentTile = ({
       return;
     }
     if (latestTileTarget[0] === x && latestTileTarget[1] === y) {
-      console.log(latestTileTarget);
-      setBorderHighlighted(true);
       const interval = setInterval(() => {
         setBorderHighlighted((curr) => !curr);
       }, 400);

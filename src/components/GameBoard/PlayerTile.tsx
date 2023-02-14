@@ -19,20 +19,16 @@ export const PlayerTile = ({ x, y, tileStatus }: Props) => {
     latestTileTarget,
     setRoundResultMessage,
     setLatestTileTarget,
-    playerTurn,
     checkIsWin,
   } = useGameContext();
   const { socket, room } = useSocketContext();
   const [borderHighlighted, setBorderHighlighted] = useState(false);
-
-  console.log(playerTurn);
 
   useEffect(() => {
     if (!latestTileTarget) {
       return;
     }
     if (latestTileTarget[0] === x && latestTileTarget[1] === y) {
-      setBorderHighlighted(true);
       const interval = setInterval(() => {
         setBorderHighlighted((curr) => !curr);
       }, 400);
