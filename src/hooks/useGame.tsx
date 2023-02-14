@@ -28,6 +28,13 @@ export const useGame = ({ ships }: Props) => {
   const [opponentBoard, setOpponentBoard] = useState<OpponentTileType[][]>(
     generate2DArray(10)
   );
+  const [roundResultMessage, setRoundResultMessage] = useState<null | string>(
+    null
+  );
+  const [latestTileTarget, setLatestTileTarget] = useState<
+    [number, number] | null
+  >(null);
+  const [isWinner, setIsWinner] = useState(false);
 
   const placeShip = (id: ShipId, coordinates: Ship["coordinates"]) => {
     const newBoard = [...planningBoard];
@@ -68,26 +75,79 @@ export const useGame = ({ ships }: Props) => {
     setPlayerBoard(planningBoard);
   };
 
-  const setTileLoading = (coord: [number, number]) => {
-    const newBoard = [...opponentBoard];
-    const [x, y] = coord;
-    newBoard[x][y] = "L";
-    setOpponentBoard(newBoard);
-  };
-
-  const fireResult = (coord: [number, number], hitOrMiss: "H" | "M") => {
-    const newBoard = [...opponentBoard];
-    const [x, y] = coord;
-    newBoard[x][y] = hitOrMiss;
-    setOpponentBoard(newBoard);
-  };
-
   const checkIsHit = (coord: [number, number]) => {
     const [x, y] = coord;
-    const tile = playerBoard[x][y];
-    const isHit = typeof tile === "string" && tile !== "H" && tile !== "M";
+    const tile = planningBoard[x][y];
+    return typeof tile === "string";
+  };
+
+  const checkIsSunk = (id: ShipId): ShipId | null => {
+    const ship = ships.getShipByID(id) as Ship;
+    return ship.hits.length === ship.length - 1 ? id : null;
+  };
+
+  const checkIsWin = () => {
+    for (const ship of ships.ships) {
+      if (ship.hits.length !== ship.length) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const updatePlayerBoard = (
+    coord: [number, number],
+    newTileStatus: PlayerTileType
+  ) => {
+    const [x, y] = coord;
+    const newBoard = [...playerBoard];
+    newBoard[x][y] = newTileStatus;
+    setPlayerBoard(newBoard);
+  };
+
+  const updateOpponentBoard = (
+    coord: [number, number],
+    newTileStatus: OpponentTileType
+  ) => {
+    const [x, y] = coord;
+    const newBoard = [...opponentBoard];
+    newBoard[x][y] = newTileStatus;
+    setOpponentBoard(newBoard);
+  };
+
+  const updateRoundResultMessage = (isHit: boolean, isSunk: ShipId | null) => {
+    if (isSunk) {
+      const ship = ships.getShipByID(isSunk)!.name;
+      if (playerTurn) {
+        return setRoundResultMessage(
+          `Great job! You sunk their ${ship}. Your skill and strategy are impressive. Keep it up!`
+        );
+      } else {
+        return setRoundResultMessage(
+          `Oh no! Your ${ship} has been sunk in the game. Don't be too hard on yourself, these things happen. Keep your chin up and stay focused on your next move.`
+        );
+      }
+    }
     if (isHit) {
-      const ship = ships.getShipByID(tile);
+      if (playerTurn) {
+        return setRoundResultMessage(
+          "Congratulations! You've just hit their ship. Your aim is spot on and your efforts have paid off. Keep it up and keep hitting those tiles."
+        );
+      } else {
+        return setRoundResultMessage(
+          "Oh no! Your ship has been hit by an opponent's attack. Don't be discouraged, these things happen and it's just a game. Keep your focus and plan your next move carefully."
+        );
+      }
+    } else {
+      if (playerTurn) {
+        return setRoundResultMessage(
+          "You missed but don't worry. Keep your spirits up and focus on your next shot. Misses are a natural part of the game and with determination and strategy, you can make your next shot count."
+        );
+      } else {
+        return setRoundResultMessage(
+          "You managed to dodge the attack, great job! Your defensive skills have paid off and you've successfully avoided an opponent's attack. Keep it up and stay alert. "
+        );
+      }
     }
   };
 
@@ -103,7 +163,18 @@ export const useGame = ({ ships }: Props) => {
     removeShip,
     playerTurn,
     setPlayerTurn,
-    setTileLoading,
+    checkIsHit,
+    checkIsSunk,
+    checkIsWin,
+    updatePlayerBoard,
+    updateOpponentBoard,
+    roundResultMessage,
+    setRoundResultMessage,
+    updateRoundResultMessage,
+    latestTileTarget,
+    setLatestTileTarget,
+    isWinner,
+    setIsWinner,
   };
 };
 
