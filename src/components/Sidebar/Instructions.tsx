@@ -10,7 +10,7 @@ export const Instructions = () => {
       <h2 className="text-2xl pl-4 tracking-widest font-semibold flex gap-2 items-center">
         {<HiArrowSmRight className="text-4xl" />}How to play
       </h2>
-      {gamePhase === "lobby" && (
+      {(gamePhase === "lobby" || gamePhase === "planning") && (
         <>
           <Text size="sm">
             Battleships is a two-player game where each player has a set of
@@ -26,7 +26,7 @@ export const Instructions = () => {
           <Text>
             <>
               Press the <strong>R</strong> key, the{" "}
-              <strong>ROTATE BUTTON</strong>on mobile, or use the{" "}
+              <strong>ROTATE BUTTON</strong> on mobile, or use the{" "}
               <strong>MOUSE WHEEL</strong> to rotate your ship.
             </>
           </Text>
