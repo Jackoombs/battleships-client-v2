@@ -9,7 +9,7 @@ export const OpponentBoard = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setHoverDisabled(true);
+      setHoverDisabled(false);
     }, 500);
   }, []);
 
