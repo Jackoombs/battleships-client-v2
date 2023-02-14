@@ -2,6 +2,7 @@ import { Instructions } from "./Instructions";
 import { StartGameButton } from "../GameControl/StartGameButton";
 import { useGameContext } from "../../hooks/useGameContext";
 import { TurnIndicator } from "../GameControl/TurnIndicator";
+import { ResultMessage } from "./ResultMessage";
 
 export const Sidebar = () => {
   const { gamePhase } = useGameContext();
@@ -11,7 +12,8 @@ export const Sidebar = () => {
       <h1 className="text-center font-semibold text-5xl pb-12">Battleships</h1>
       <Instructions />
       {gamePhase === "planning" && <StartGameButton />}
-      <TurnIndicator />
+      {gamePhase === "battle" && <TurnIndicator className="mb-10" />}
+      <ResultMessage />
     </aside>
   );
 };
