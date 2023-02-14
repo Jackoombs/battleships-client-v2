@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ShipConstructor } from "../vite-env";
+import type { ShipConstructor, ShipId } from "../vite-env";
 
 export const useShips = () => {
   const createShip = ({
@@ -11,6 +11,7 @@ export const useShips = () => {
     isActive,
   }: ShipConstructor) => {
     let coordinates: [number, number][] = [];
+    let hits: [number, number][] = [];
     return {
       name,
       id,
@@ -19,6 +20,7 @@ export const useShips = () => {
       highlightColor,
       isActive,
       coordinates,
+      hits,
     };
   };
 
@@ -75,11 +77,11 @@ export const useShips = () => {
     return ships.find((ship) => !ship.coordinates.length);
   };
 
-  const getShipByID = (id: Ship["id"]) => {
+  const getShipByID = (id: ShipId) => {
     return ships.find((ship) => ship.id === id);
   };
 
-  const setActiveShip = (id: Ship["id"] | undefined) => {
+  const setActiveShip = (id: ShipId | undefined) => {
     setShips((ships) => {
       return ships.map((ship) => {
         ship.isActive = id === ship.id ? true : false;
@@ -88,7 +90,7 @@ export const useShips = () => {
     });
   };
 
-  const setCoordinates = (id: Ship["id"], coordinates: Ship["coordinates"]) => {
+  const setCoordinates = (id: ShipId, coordinates: Ship["coordinates"]) => {
     const newShips = ships.map((ship) => {
       if (ship.id === id) {
         ship.coordinates = coordinates;
@@ -108,6 +110,16 @@ export const useShips = () => {
     return true;
   };
 
+  const updateShipOnHit = (id: ShipId, coord: [number, number]) => {
+    const newShips = ships.map((ship) => {
+      if (ship.id === id) {
+        ship.hits.push(coord);
+      }
+      return ship;
+    });
+    setShips(newShips);
+  };
+
   return {
     ships,
     getActiveShip,
@@ -116,6 +128,7 @@ export const useShips = () => {
     setCoordinates,
     setActiveShip,
     areAllShipsPlaced,
+    updateShipOnHit,
   };
 };
 
