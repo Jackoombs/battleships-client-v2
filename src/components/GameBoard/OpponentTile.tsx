@@ -69,7 +69,7 @@ export const OpponentTile = ({
         setPlayerTurn((curr) => !curr);
         setRoundResultMessage(null);
         setLatestTileTarget(null);
-      }, 1000);
+      }, 4000);
     }
   }, [latestTileTarget]);
 

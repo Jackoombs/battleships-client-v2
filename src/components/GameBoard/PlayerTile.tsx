@@ -21,7 +21,6 @@ export const PlayerTile = ({ x, y, tileStatus }: Props) => {
     setLatestTileTarget,
     playerTurn,
     checkIsWin,
-    setGamePhase,
   } = useGameContext();
   const { socket, room } = useSocketContext();
   const [borderHighlighted, setBorderHighlighted] = useState(false);
@@ -33,7 +32,6 @@ export const PlayerTile = ({ x, y, tileStatus }: Props) => {
       return;
     }
     if (latestTileTarget[0] === x && latestTileTarget[1] === y) {
-      console.log(latestTileTarget);
       setBorderHighlighted(true);
       const interval = setInterval(() => {
         setBorderHighlighted((curr) => !curr);
@@ -41,15 +39,14 @@ export const PlayerTile = ({ x, y, tileStatus }: Props) => {
       setTimeout(() => {
         clearInterval(interval);
         const isWin = checkIsWin();
-        console.log("isWin");
         if (isWin) {
-          return socket.emit("isWinner", room);
+          return socket.emit("isWin", room);
         }
         setPlayerTurn((curr) => !curr);
         setRoundResultMessage(null);
         setLatestTileTarget(null);
         setBorderHighlighted(false);
-      }, 1000);
+      }, 4000);
     }
   }, [latestTileTarget]);
 
