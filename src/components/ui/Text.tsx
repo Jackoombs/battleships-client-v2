@@ -6,6 +6,7 @@ interface Props {
   size?: "sm" | "lg";
   center?: boolean;
   bold?: boolean;
+  className?: string;
 }
 
 export const Text = ({
@@ -14,6 +15,7 @@ export const Text = ({
   size = "sm",
   center = false,
   bold = false,
+  className,
 }: Props) => {
   return (
     <p
@@ -23,7 +25,8 @@ export const Text = ({
         size === "sm" && "text-base",
         size === "lg" && "text-lg",
         center && "text-center",
-        bold && "font-medium"
+        bold && "font-medium",
+        className
       )}
     >
       {children}
