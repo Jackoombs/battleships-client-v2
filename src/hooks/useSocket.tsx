@@ -36,7 +36,6 @@ export const useSocket = ({ game, ships }: Props) => {
     });
 
     socket.on("checkPlayerReady", () => {
-      console.log(playerShipsReady);
       if (playerShipsReady) {
         socket.emit("beginGame", room);
       }
@@ -96,7 +95,6 @@ export const useSocket = ({ game, ships }: Props) => {
   };
 
   const playerFire = (coord: [number, number]) => {
-    console.log("fire!");
     socket.emit("playerFire", room, coord);
   };
 
