@@ -23,6 +23,7 @@ export const OpponentTile = ({
   setHoverDisabled,
 }: Props) => {
   const {
+    opponentBoard,
     updateOpponentBoard,
     latestTileTarget,
     setLatestTileTarget,
@@ -51,6 +52,12 @@ export const OpponentTile = ({
       updateOpponentBoard([x, y], "L");
       setHoverDisabled(true);
       playerFire([x, y]);
+      setTimeout(() => {
+        if (opponentBoard[x][y] === "L") {
+          updateOpponentBoard([x, y], 0);
+          setHoverDisabled(false);
+        }
+      }, 3000);
     }
   };
 
