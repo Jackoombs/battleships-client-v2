@@ -60,11 +60,11 @@ export const PlayerTile = ({ x, y, tileStatus }: Props) => {
   return (
     <div
       className={clsx(
-        "aspect-square w-full lg:w-14 xl:w-[4.5rem] text-slate-900 duration-100 rounded sm:rounded-lg flex items-center justify-center text-2xl sm:text-4xl xl:text-6xl",
+        "aspect-square w-full lg:w-14 xl:w-[4.5rem] text-slate-900 border-2 duration-100 rounded sm:rounded-lg flex items-center justify-center text-2xl sm:text-4xl xl:text-6xl",
         tileColor(),
         borderHighlighted
-          ? "border-red-500 border-[6px]"
-          : "border-slate-900 lg:border-slate-700 border-2"
+          ? "border-red-500 lg:border-[6px]"
+          : "border-slate-900"
       )}
     >
       {tileStatus === "H" && <BiTargetLock className="text-cyan-200" />}
