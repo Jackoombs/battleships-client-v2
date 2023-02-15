@@ -56,6 +56,21 @@ export function PlanningBoard() {
     11;
   };
 
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    const xCoord = e.targetTouches[0].clientX;
+    const yCoord = e.targetTouches[0].clientY;
+    const elements = document.elementsFromPoint(xCoord, yCoord);
+    const x: string | null = elements[0].getAttribute("x");
+    const y: string | null = elements[0].getAttribute("y");
+    if (x === null || y === null) {
+      return;
+    } else {
+      const coords: [number, number] = [+x, +y];
+      setLastHoveredTile(coords);
+      updateHighlightedTiles(coords);
+    }
+  };
+
   const handleClick = (tileStatus: PlanningTileType) => {
     if (!activeShip && typeof tileStatus === "string") {
       removeShip(tileStatus);
@@ -68,8 +83,9 @@ export function PlanningBoard() {
     <>
       <div
         className="relative mx-auto grid grid-cols-10 w-full lg:w-max"
-        onPointerLeave={() => setHighlightedTiles([])}
+        onMouseLeave={() => setHighlightedTiles([])}
         onWheel={handleWheel}
+        onTouchMove={handleTouchMove}
       >
         {[...Array(10)].map((e, y) =>
           [...Array(10)].map((e2, x) => (

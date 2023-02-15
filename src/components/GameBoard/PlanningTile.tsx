@@ -64,18 +64,21 @@ export function PlanningTile({
 
   return (
     <div
+      {...{ x, y }}
       className={clsx(
-        "aspect-square w-full lg:w-14 xl:w-[4.5rem] border-slate-900 lg:border-slate-700 border-2 duration-100 rounded sm:rounded-lg",
+        "tile aspect-square w-full lg:w-14 xl:w-[4.5rem] border-slate-900 border-2 duration-100 rounded sm:rounded-lg",
         tileColor(x, y),
         isCursorPointer()
       )}
       onClick={() => handleClick(tileStatus)}
-      onPointerEnter={() => {
+      onMouseEnter={() => {
         setLastHoveredTile([x, y]);
         updateHighlightedTiles([x, y]);
       }}
-    >
-      {/* {`${x}, ${y}`} */}
-    </div>
+      onTouchStart={() => {
+        setLastHoveredTile([x, y]);
+        updateHighlightedTiles([x, y]);
+      }}
+    ></div>
   );
 }
