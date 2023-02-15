@@ -18,7 +18,7 @@ export const ShowInfoButton = () => {
       {modalOpen && (
         <Modal callBack={() => setModalOpen(false)}>
           <div>
-            <Instructions />
+            <Instructions theme="dark" />
             <button
               onClick={() => setModalOpen(false)}
               className="px-8 py-4 flex justify-center text-cyan-100 rounded font-semibold text-lg uppercase tracking-widest duration-150 bg-slate-900 hover:bg-cyan-100 hover:text-slate-900"
