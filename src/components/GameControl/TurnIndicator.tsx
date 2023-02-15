@@ -19,7 +19,7 @@ export const TurnIndicator = ({
   return (
     <div
       className={clsx(
-        "relative bg-cyan-100 rounded mx-auto flex overflow-hidden items-center",
+        "relative bg-cyan-100 rounded mx-auto flex overflow-hidden items-center w-full",
         className,
         maxWidth,
         height
