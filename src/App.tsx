@@ -21,7 +21,7 @@ function App() {
     <GameContext.Provider value={game}>
       <SocketContext.Provider value={socket}>
         <ShipsContext.Provider value={ships}>
-          <div className="min-h-[100svh] bg-slate-900 font-sans lg:grid grid-cols-[auto_1fr]">
+          <div className="min-h-screen bg-slate-900 font-sans lg:grid grid-cols-[auto_1fr]">
             <h1 className="lg:hidden text-center py-10 text-5xl md:text-6xl uppercase tracking-widest text-cyan-100">
               Battleships
             </h1>
