@@ -42,6 +42,7 @@ export const useSocket = ({ game, ships }: Props) => {
     });
 
     socket.on("opponentReceiveFire", (coord: [number, number]) => {
+      console.log("player received fire", coord);
       const [x, y] = coord;
       let isSunk: ShipId | null = null;
       const isHit = game.checkIsHit(coord);
@@ -56,6 +57,7 @@ export const useSocket = ({ game, ships }: Props) => {
     socket.on(
       "endRound",
       (coord: [number, number], isHit: boolean, isSunk: ShipId | null) => {
+        console.log("end of round", coord, isHit, isSunk);
         if (game.playerTurn) {
           game.updateOpponentBoard(coord, isHit ? "H" : "M");
         } else {
@@ -95,6 +97,7 @@ export const useSocket = ({ game, ships }: Props) => {
   };
 
   const playerFire = (coord: [number, number]) => {
+    console.log("player fired", coord);
     socket.emit("playerFire", room, coord);
   };
 
