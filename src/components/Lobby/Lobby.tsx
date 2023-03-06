@@ -33,6 +33,14 @@ export const Lobby = () => {
           </div>
         </Modal>
       )}
+      <Text
+        theme="light"
+        bold
+        className="container max-w-sm lg:max-w-lg mx-auto text-center pt-10 italic"
+      >
+        Please note that this app uses a free tier server that may take a few
+        seconds to start up when first visiting the page.
+      </Text>
     </div>
   );
 };
