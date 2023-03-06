@@ -55,7 +55,7 @@ export const Form = ({ createOrJoin, setCreateOrJoin }: Props) => {
       <div>
         <label className="hidden" htmlFor="Enter Room Name"></label>
         <input
-          className="w-full py-5 px-2 rounded outline:none focus:outline-red-400 focus:outline text-slate-900 font-medium text-center placeholder:text-slate-500"
+          className="w-full h-16 px-2 rounded outline:none focus:outline-red-400 focus:outline text-slate-900 font-medium text-center placeholder:text-slate-500"
           {...register("room")}
           type="text"
           placeholder={

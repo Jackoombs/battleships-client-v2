@@ -24,7 +24,7 @@ export const Button = ({
       type={type}
       onClick={callback}
       className={clsx(
-        "duration-150 px-4 py-4 rounded font-semibold text-md uppercase tracking-widest border-2",
+        "duration-150 px-4 h-16 rounded font-semibold text-md uppercase tracking-widest border-2",
         theme === "light" &&
           "bg-cyan-100 text-slate-900 hover:bg-slate-900 hover:text-cyan-100 border-cyan-100",
         theme === "dark" &&
