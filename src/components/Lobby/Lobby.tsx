@@ -39,7 +39,7 @@ export const Lobby = () => {
         className="container max-w-sm lg:max-w-lg mx-auto text-center pt-10 italic"
       >
         Please note that this app uses a free tier server that may take a few
-        seconds to start up when first visiting the page.
+        minutes before creating a lobby is possible.
       </Text>
     </div>
   );
